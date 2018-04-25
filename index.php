@@ -1,5 +1,6 @@
 <?php
-	require_once("./includes/globals.php");
+	require __DIR__ . '/vendor/autoload.php';
+    require_once("./includes/globals.php");
 
     // Set current page variable
     if (isset($_GET['page']))
