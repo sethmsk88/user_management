@@ -28,10 +28,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-    <!-- <link href="../css/navbar-custom1.css" rel="stylesheet"> -->
-    <link href="/bootstrap/apps/css/index.css" rel="stylesheet">
-    <!-- <link href="../css/master.css" rel="stylesheet"> -->
-    <!-- <link href="./css/main.css" rel="stylesheet"> -->
+    <link href="../css/navbar-custom1.css" rel="stylesheet">
+    <!-- <link href="/bootstrap/apps/css/index.css" rel="stylesheet"> -->
+    <link href="../css/master.css" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet">
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -65,7 +65,7 @@
         <!-- Nav Bar -->
         <nav
             id="pageNavBar"
-            class="navbar navbar-default navbar-custom navbar-static-top"
+            class="navbar navbar-default navbar-custom1 navbar-static-top"
             role="navigation">
 
             <div class="container">
@@ -83,7 +83,7 @@
                     <a class="navbar-brand" href="?page=<?= APP_HOMEPAGE ?>"><?= APP_NAME ?></a>
                 </div>
 
-                <div id="navbarCollapse" class="collapse navbar-collapse">
+                                <div id="navbarCollapse" class="collapse navbar-collapse">
                     <!-- Nav Links -->
                     <ul class="nav navbar-nav">
                         
