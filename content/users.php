@@ -127,7 +127,7 @@ while ($row = $result->fetch_assoc()) {
 							<td><?= $app['Name'] ?></td>
 							<td>
 								<select class="app-permissions" data-appid="<?= $app['AppId'] ?>">
-									<option value="-1" selected="selected"></option>
+									<option value="-1" selected="selected">Guest</option>
 									<option value="1">Standard</option>
 									<option value="0">Admin</option>
 								</select>
