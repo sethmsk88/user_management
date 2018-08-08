@@ -1,19 +1,14 @@
 <?php
-	require __DIR__ . '/vendor/autoload.php';
-    require_once("./includes/globals.php");
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/user_management/vendor/autoload.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/user_management/includes/globals.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/login_functions.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
 
     // Set current page variable
     if (isset($_GET['page']))
         define("APP_CURRENTPAGE", $_GET['page']);
     else
-        define("APP_CURRENTPAGE", "");
-
-
-	require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/dbInfo.php';
-    require_once './includes/functions.php';
-
-    // Open connection to Database
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
+        define("APP_CURRENTPAGE", "");    
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +54,7 @@
             sec_session_start();
 
             // Check to see if User is logged in
-            $loggedIn = login_check($conn);
+            login_check(APP_ID, $conn);
         ?>
 
         <!-- Nav Bar -->
@@ -87,7 +82,7 @@
                     <!-- Nav Links -->
                     <ul class="nav navbar-nav">
                         
-                        <?php if ($loggedIn) { ?>
+                        <?php if ($GLOBALS['LOGGED_IN']) { ?>
                         <li id="admin-link">
                             <a id="navLink-admin" href="./?page=admin">Admin</a>
                         </li>
@@ -95,7 +90,7 @@
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <?php if ($loggedIn) { ?>
+                        <?php if ($GLOBALS['LOGGED_IN']) { ?>
                         <li class="dropdown" style="cursor:pointer;">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="glyphicon glyphicon-user" style="margin-right:8px;"></span><?= $_SESSION['firstName'] ?> <span class="glyphicon glyphicon-triangle-bottom" style="margin-left:4px;"></span></a>
                             <ul class="dropdown-menu">

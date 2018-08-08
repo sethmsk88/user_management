@@ -1,5 +1,6 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
-require __DIR__ . '/../vendor/autoload.php';
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/user_management/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
 
 try {
 	// Make sure that it is a POST request.
