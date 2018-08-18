@@ -17,7 +17,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= APP_NAME ?></title>
+    <title><?= $GLOBALS['APP_NAME'] ?></title>
 
     <!-- Linked stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -54,7 +54,7 @@
             sec_session_start();
 
             // Check to see if User is logged in
-            login_check(APP_ID, $conn);
+            login_check($GLOBALS['APP_ID'], $conn);
         ?>
 
         <!-- Nav Bar -->
@@ -75,7 +75,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="?page=<?= APP_HOMEPAGE ?>"><?= APP_NAME ?></a>
+                    <a class="navbar-brand" href="?page=<?= $GLOBALS['APP_HOMEPAGE'] ?>"><?= $GLOBALS['APP_NAME'] ?></a>
                 </div>
 
                                 <div id="navbarCollapse" class="collapse navbar-collapse">
@@ -94,11 +94,12 @@
                         <li class="dropdown" style="cursor:pointer;">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="glyphicon glyphicon-user" style="margin-right:8px;"></span><?= $_SESSION['firstName'] ?> <span class="glyphicon glyphicon-triangle-bottom" style="margin-left:4px;"></span></a>
                             <ul class="dropdown-menu">
-                                <!-- <li>
-                                    <a id="settings-link" href="?page=settings">Settings</a>
-                                </li> -->
                                 <li>
-                                    <a id="logout-link" href="./content/act_logout.php"> Log out</a>
+                                    <?php
+                                        $redirectUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                        $logoutUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/bootstrap/apps/shared/act_logout.php?redirect=' . $redirectUrl;
+                                    ?>
+                                    <a id="logout-link" href="<?= $logoutUrl ?>"> Log out</a>
                                 </li>
                             </ul>
                         </li>
@@ -126,7 +127,7 @@
         		$filePath = './content/' . $_GET["page"] . '.php';
         	}
         	else{
-        		$filePath = './content/' . APP_HOMEPAGE . '.php';
+        		$filePath = './content/' . $GLOBALS['APP_HOMEPAGE'] . '.php';
         	}
 
         	if (file_exists($filePath)){

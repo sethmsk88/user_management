@@ -1,6 +1,15 @@
-<script type="text/javascript" src="<?= APP_PATH_URL ?>js/content/users.js"></script>
+<script type="text/javascript" src="<?= $GLOBALS['APP_PATH_URL'] ?>js/content/users.js"></script>
 
 <?php
+// Make sure this user has access to this application
+if (!$GLOBALS['LOGGED_IN']) {
+	echo '<div class="container text-danger h4">Must be logged in to access this application</div>';
+	exit;
+} else if (is_null($GLOBALS['ACCESS_LEVEL'])) {
+	echo '<div class="container text-danger h4">You do not have access to this application</div>';
+	exit;
+}
+
 // Get all apps
 $stmt = $conn->prepare("
 	select *
