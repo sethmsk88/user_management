@@ -41,6 +41,8 @@ while ($row = $result->fetch_assoc()) {
 ?>
 
 <div class="container">
+	<div id="message-box" class="row" style="padding-bottom:10px"></div>
+
 	<div class="row">
 		<button class="btn btn-default">Add New User</button>
 	</div>

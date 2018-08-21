@@ -1,6 +1,16 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/user_management/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/user_management/includes/globals.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/login_functions.php';
+
+sec_session_start();
+
+// for return data
+$jsonDataArray = [
+	"errors" => [],
+	"success" => false
+];
 
 try {
 	// Make sure that it is a POST request.
@@ -25,24 +35,39 @@ try {
 	    throw new Exception('Received content contained invalid JSON!');
 	}
 } catch (Exception $e) {
-	echo "ERROR: {$e->getMessage()}<br>";
+	$jsonDataArray["errors"][] = $e->getMessage();
+	echo json_encode($jsonDataArray);
 	exit;
+}
+
+// Make sure the user isn't changing their own access level for the user_management app
+// If changing permissions for the currently logged in user
+$allowChangeUserManagement = true;
+if ($jsonData['user']['userid'] == $_SESSION['user_id']) {
+	$allowChangeUserManagement = false;
 }
 
 // Delete all permissions records for this user
 try {
-	echo 'Deleting all records from apps_users where UserId is ' . $jsonData['user']['userid'] . '<br>'; // debugging
-
-	$stmt = $conn->prepare("
-		delete from user_management.apps_users
-		where UserId = ?
-	");
-
-	$stmt->bind_param("i", $jsonData['user']['userid']);
+	if ($allowChangeUserManagement) {
+		$stmt = $conn->prepare("
+			delete from user_management.apps_users
+			where UserId = ?
+		");
+		$stmt->bind_param("i", $jsonData['user']['userid']);
+	} else {
+		$stmt = $conn->prepare("
+			delete from user_management.apps_users
+			where UserId = ?
+				and AppId <> ?
+		");
+		$stmt->bind_param("ii", $jsonData['user']['userid'], $_GLOBALS['APP_ID']);
+	}
+	
 	$stmt->execute();
-	echo 'Delete records<br>';
 } catch (Exception $e) {
-	echo "ERROR: {$e->getMessage()}<br>";
+	$jsonDataArray["errors"][] = $e->getMessage();
+	echo json_encode($jsonDataArray);
 	exit;
 }
 
@@ -57,6 +82,13 @@ try {
 	foreach ($jsonData['app-permissions'] as $key => $val) {
 		// Only insert records for the apps the user has access to
 		if ($val['permissionsLevel'] > -1) {
+
+			// If this appid is the user_management app and we are not allowing
+			// the change of user_management app permissions, skip this iteration.
+			if ($val['appid'] == $_GLOBALS['APP_ID'] && $allowChangeUserManagement) {
+				continue;
+			}
+			
 			if (!$stmt->bind_param("iii", $val['appid'], $jsonData['user']['userid'], $val['permissionsLevel'])) {
 				throw new Exception('Binding parameters failed: (' . $stmt->errno . ') ' . $stmt->error);
 			}
@@ -66,7 +98,11 @@ try {
 		}
 	}
 } catch (Exception $e) {
-	echo "ERROR inserting a permissions record: {$e->getMessage()}<br>";
+	$jsonDataArray["errors"][] = "ERROR inserting a permissions record: {$e->getMessage()}<br>";
+	echo json_encode($jsonDataArray);
 	exit;
 }
+
+$jsonDataArray["success"] = true;
+echo json_encode($jsonDataArray);
 ?>

@@ -55,7 +55,6 @@ $(document).ready(function() {
 	// Submit handler for Edit App Permissions Dialog
 	$('#editAppPermissions-dialog button.submit-btn').click(function (e) {
 		var userId = $('#editAppPermissions-dialog').attr('data-userid');
-		// var userId = $('#edit-app-permissions-btn-dialog').find('table').attr('data-userid');
 		var userObj = {'userid' : userId};
 		var appPermissions = [];
 
@@ -81,12 +80,27 @@ $(document).ready(function() {
 			contentType: "application/json",
 			dataType: 'json', // data type for response
 			success: function(response) {
-				// set the select box values for each app
-				// iterate through response JSON object
-				// if an AppId has an AccessLevel that is not null, set the select box to the correct Access Level
-				$.each(response, function(idx, el) {
-					$('select.app-permissions[data-appid='+ el.AppId +']').val(el.AccessLevel);
-				});
+
+				// Output error messages to the message-box if there are any
+				var messageBoxHtml = "";
+				if (response.errors.length > 0) {
+					response.errors.forEach(function(message) {
+						messageBoxHtml += '<div class="text-danger">'+ message +'</div>';
+					});
+				}
+
+				// Output success messages to message-box
+				messageBoxHtml += '<div class="text-success">App permissions updated</div>';
+
+				// Hide message box
+				$messageBox = $('div#message-box');
+				$messageBox.hide();
+
+				// Insert messages into message box
+				$messageBox.html(messageBoxHtml);
+
+				// Show and animate the message box
+				$messageBox.slideDown();
 			}
 		});
 	});
