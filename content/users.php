@@ -44,7 +44,11 @@ while ($row = $result->fetch_assoc()) {
 	<div id="message-box" class="row" style="padding-bottom:10px"></div>
 
 	<div class="row">
-		<button class="btn btn-default">Add New User</button>
+		<button class="btn btn-primary"
+			data-toggle="modal"
+			data-target="#addUser-dialog">
+			Add New User
+		</button>
 	</div>
 
 	<div class="row">
@@ -198,3 +202,61 @@ while ($row = $result->fetch_assoc()) {
 	</div>
 </div>
 
+<!-- Add User Dialog -->
+<div class="modal fade"
+	id="addUser-dialog"
+	role="dialog"
+	tabindex="-1"
+	aria-labelledby=""
+	aria-hidden="true">
+
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form id="addUser-form" name="addUser-form" action="./content/act_addUser.php" method="post">
+				<div class="modal-header">
+					<button
+						type="button"
+						class="close"
+						data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Add User</h4>
+				</div>
+				<div class="modal-body">
+					<!-- // Email address -->
+					<div class="form-group">
+						<label for="addUser-email">Email</label>
+						<input type="email" name="addUser-email" id="addUser-email" class="form-control">
+					</div>
+					<!-- // First Name -->
+					<div class="form-group">
+						<label for="addUser-firstName">First Name</label>
+						<input type="text" name="addUser-firstName" id="addUser-firstName" class="form-control">
+					</div>
+					<!-- // Last Name -->
+					<div class="form-group">
+						<label for="addUser-lastName">Last Name</label>
+						<input type="text" name="addUser-lastName" id="addUser-lastName" class="form-control">
+					</div>
+					<!-- // Password -->
+					<div class="form-group">
+						<label for="addUser-password">Password</label>
+						<input type="password" name="addUser-password" id="addUser-password" class="form-control">
+					</div>
+					<!-- // Confirm Password -->
+					<div class="form-group">
+						<label for="addUser-confirmPassword">Confirm Password</label>
+						<input type="password" name="addUser-confirmPassword" id="addUser-confirmPassword" class="form-control">
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<!-- <input type="submit" class="btn btn-default"  value="Add User"> -->
+		        	<button type="button" class="btn btn-default submit-btn" data-dismiss="modal">Add User</button>
+		        </div>
+		    </form>
+		</div>
+	</div>
+</div>

@@ -1,20 +1,6 @@
 $(document).ready(function() {
-	// Click handler for Edit App Permissions buttons
-	/*$('.edit-app-permissions-btn').click(function() {
-		// show dialog to edit the user's app permissions
-		$('#editAppPermissions-dialog').dialog();
-
-	});
-
-	// Click handler for Delete User buttons
-	$('.delete-user-btn').click(function() {
-		console.log('delete user id: ' + $(this).attr('data-userid'));
-
-	});*/
-
 	// When the Edit App Permissions Dialog is toggled ON, populate the app permissions table
-	$('#editAppPermissions-dialog').on('show.bs.modal', function (e) {
-		
+	$('#editAppPermissions-dialog').on('show.bs.modal', function (e) {		
 		$clickedBtn = $(e.relatedTarget);
 		$userId = $clickedBtn.attr('data-userid');
 
@@ -84,7 +70,7 @@ $(document).ready(function() {
 				// Output error messages to the message-box if there are any
 				var messageBoxHtml = "";
 				if (response.errors.length > 0) {
-					response.errors.forEach(function(message) {
+					$.each(response.errors, function(i, message) {
 						messageBoxHtml += '<div class="text-danger">'+ message +'</div>';
 					});
 				}
@@ -116,23 +102,88 @@ $(document).ready(function() {
 		$(this).find('.modal-title').text('Delete ' + $userName);
 	});
 
-	// Form confirm (yes/ok) handler, submits form
-	/*$('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
-		
-		// Get fileID from buttonID
-		var id_parts = $buttonID.split('-');
-		var link_id = id_parts[1];
-		
-		$.ajax({
-			url: './content/act_appendix.php',
-			type: 'post',
-			data: {
-				'actionType': 1, // delete reference action type
-				'linkID': link_id
-			},
-			success: function(response) {
-				location.reload();
-			}
-		});
-	});*/
+	// Submit handler for Add User Dialog
+	$('#addUser-dialog button.submit-btn').click(function (e) {		
+		$form = $('#addUser-form');
+		var errors = [];
+		var email = $('#addUser-email').val().trim();
+		var password = $('#addUser-password').val().trim();
+		var confirmPassword = $('#addUser-confirmPassword').val().trim();
+
+		// Validate email address format
+		if (!_validateEmail(email)) {
+			errors.push("Invalid email format");
+		}
+
+		// Password minimum length
+		if (password.length < 8) {
+			errors.push('Password must be at least 8 characters in length');
+		}
+
+		// Confirm that passwords match
+		if (password != confirmPassword) {
+			errors.push('"Password" and "Confirm Password" must match');
+		}
+
+		// Output error messages to the message-box if there are any
+		var messageBoxHtml = "";
+		if (errors.length > 0) {
+			$.each(errors, function(i, message) {
+				messageBoxHtml += '<div class="text-danger">'+ message +'</div>';
+			});
+
+			// Hide message box
+			$messageBox = $('div#message-box');
+			$messageBox.hide();
+
+			// Insert messages into message box
+			$messageBox.html(messageBoxHtml);
+
+			// Show and animate the message box
+			$messageBox.slideDown();
+
+			// return false;
+		} else {
+			// hash password
+			var hashedPassword = hex_sha512(password);
+			$('#addUser-password').val(hashedPassword);
+
+			// Clear confirmPassword field
+			$('#addUser-confirmPassword').val('');
+
+			// Submit form
+			$form.submit();
+		}
+	});
+
+
+	var getUrlParameter = function getUrlParameter(sParam) {
+	    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+	        sURLVariables = sPageURL.split('&'),
+	        sParameterName,
+	        i;
+
+	    for (i = 0; i < sURLVariables.length; i++) {
+	        sParameterName = sURLVariables[i].split('=');
+
+	        if (sParameterName[0] === sParam) {
+	            return sParameterName[1] === undefined ? true : sParameterName[1];
+	        }
+	    }
+	};
+	// If GET variables exist
+	var successMsg = getUrlParameter("success");
+	var errorMsg = getUrlParameter("error");
+
+	// Hide message box
+	$messageBox = $('div#message-box');
+	$messageBox.hide();
+
+	if (successMsg != undefined) {
+		$messageBox.html('<div class="text-success">' + successMsg + '</div>');
+		$messageBox.slideDown();
+	} else if (errorMsg != undefined) {
+		$messageBox.html('<div class="text-danger">' + errorMsg + '</div>');
+		$messageBox.slideDown();
+	}
 });
