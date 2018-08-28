@@ -82,12 +82,6 @@
                                 <div id="navbarCollapse" class="collapse navbar-collapse">
                     <!-- Nav Links -->
                     <ul class="nav navbar-nav">
-                        
-                        <?php if ($GLOBALS['LOGGED_IN']) { ?>
-                        <li id="admin-link">
-                            <a id="navLink-admin" href="./?page=admin">Admin</a>
-                        </li>
-                        <?php } ?>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
