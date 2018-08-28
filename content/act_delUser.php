@@ -13,14 +13,10 @@ try {
 	} else if (!$stmt->execute()) {
 		throw new Exception($stmt);
 	}
-} catch ($e) {
-	echo json_encode([
-		'error' => 'Failed to delete User: ' . $e->errno . ' - ' . $e->error
-	]);
+} catch (Exception $e) {
+	echo 0;
 	exit;
 }
 
-echo json_encode([
-	'success' => true
-]);
+echo 1;
 ?>

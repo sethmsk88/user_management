@@ -185,18 +185,8 @@ while ($row = $result->fetch_assoc()) {
 				<p>Are you sure you want to delete this user?</p>
 			</div>
 			<div class="modal-footer">
-				<button
-					type="button"
-					class="btn btn-default"
-					data-dismiss="modal">
-					Cancel
-				</button>
-	        	<button
-	        		type="button"
-	        		class="btn btn-danger"
-	        		id="confirm">
-	        		Yes
-	        	</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	        	<button type="button" class="btn btn-danger submit-btn">Yes</button>
 			</div>
 		</div>
 	</div>

@@ -102,6 +102,28 @@ $(document).ready(function() {
 		$(this).find('.modal-title').text('Delete ' + $userName);
 	});
 
+	// Delete user handler
+	$('#confirmDelete-dialog button.submit-btn').click(function (e) {
+		var userId = $('#confirmDelete-dialog').attr('data-userid');
+
+		// Delete user
+		$.ajax({
+			type: 'post',
+			url: './content/act_delUser.php',
+			data: {'userId' : userId},
+			success: function(response) {
+				if (response == 1) {
+					window.location.reload(); // refresh page
+				} else {
+					$messageBox = $('div#message-box');
+					$messageBox.hide();
+					$messageBox.html('Error deleting user. Contact administrator.');
+					$messageBox.slideDown();
+				}
+			}
+		});
+	});
+
 	// Submit handler for Add User Dialog
 	$('#addUser-dialog button.submit-btn').click(function (e) {		
 		$form = $('#addUser-form');
