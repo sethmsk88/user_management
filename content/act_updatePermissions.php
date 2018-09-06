@@ -40,31 +40,17 @@ try {
 	exit;
 }
 
-// Make sure the user isn't changing their own access level for the user_management app
-// If changing permissions for the currently logged in user
-$allowChangeUserManagement = true;
-if ($jsonData['user']['userid'] == $_SESSION['user_id']) {
-	$allowChangeUserManagement = false;
-}
-
 // Delete all permissions records for this user
 try {
-	if ($allowChangeUserManagement) {
-		$stmt = $conn->prepare("
-			delete from user_management.apps_users
-			where UserId = ?
-		");
-		$stmt->bind_param("i", $jsonData['user']['userid']);
-	} else {
-		$stmt = $conn->prepare("
-			delete from user_management.apps_users
-			where UserId = ?
-				and AppId <> ?
-		");
-		$stmt->bind_param("ii", $jsonData['user']['userid'], $_GLOBALS['APP_ID']);
-	}
+	$stmt = $conn->prepare("
+		delete from user_management.apps_users
+		where UserId = ?
+	");
+	$stmt->bind_param("i", $jsonData['user']['userid']);
 	
-	$stmt->execute();
+	if (!$stmt->execute()) {
+		throw new Exception($stmt->error);
+	}
 } catch (Exception $e) {
 	$jsonDataArray["errors"][] = $e->getMessage();
 	echo json_encode($jsonDataArray);
